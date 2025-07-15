@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    container_name: java_course_db
+    environment:
+      POSTGRES_DB: java_course
+      POSTGRES_USER: java_user
+      POSTGRES_PASSWORD: pass321
+
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:8.9
+    container_name: pgadmin4_java
+    ports:
+      - "15432:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=java@email.com
+      - PGADMIN_DEFAULT_PASSWORD=pass321
+
+networks:
+  db:
+    driver: bridge
+  pgadmin:
+    driver: bridge
+
+volumes:
+  postgres_data:
