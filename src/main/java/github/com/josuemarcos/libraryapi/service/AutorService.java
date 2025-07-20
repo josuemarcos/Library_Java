@@ -4,6 +4,7 @@ import github.com.josuemarcos.libraryapi.model.Autor;
 import github.com.josuemarcos.libraryapi.repository.AutorRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,5 +27,16 @@ public class AutorService {
 
     public void deletarAutor(UUID id) {
         repository.deleteById(id);
+    }
+
+    public List<Autor> pesquisarAutores(String nome, String nacionalidade) {
+        if(nome != null && nacionalidade != null) {
+            return repository.findByNomeAndNacionalidade(nome, nacionalidade);
+        } else if (nome != null) {
+            return repository.findByNome(nome);
+        } else if (nacionalidade != null) {
+            return repository.findByNacionalidade(nacionalidade);
+        }
+        return repository.findAll();
     }
 }
