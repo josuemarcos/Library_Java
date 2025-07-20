@@ -39,4 +39,8 @@ public class AutorService {
         }
         return repository.findAll();
     }
+
+    public void atualizarAutor(Autor autor) {
+        repository.save(autor);
+    }
 }
