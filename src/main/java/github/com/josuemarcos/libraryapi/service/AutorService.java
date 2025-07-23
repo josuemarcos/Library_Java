@@ -2,6 +2,7 @@ package github.com.josuemarcos.libraryapi.service;
 
 import github.com.josuemarcos.libraryapi.model.Autor;
 import github.com.josuemarcos.libraryapi.repository.AutorRepository;
+import github.com.josuemarcos.libraryapi.validator.AutorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +13,16 @@ import java.util.UUID;
 public class AutorService {
 
     private final AutorRepository repository;
+    private final AutorValidator validator;
 
-    public AutorService(AutorRepository repository) {
+    public AutorService(AutorRepository repository, AutorValidator validator) {
         this.repository = repository;
+        this.validator = validator;
     }
 
     public Autor salvar(Autor autor) {
-       return repository.save(autor);
+        validator.validar(autor);
+        return repository.save(autor);
     }
 
     public Optional<Autor> encontrarAutorPorId(UUID id) {
@@ -41,6 +45,7 @@ public class AutorService {
     }
 
     public void atualizarAutor(Autor autor) {
+        validator.validar(autor);
         repository.save(autor);
     }
 }
