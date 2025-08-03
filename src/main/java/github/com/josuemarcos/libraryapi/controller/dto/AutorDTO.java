@@ -3,6 +3,7 @@ package github.com.josuemarcos.libraryapi.controller.dto;
 import github.com.josuemarcos.libraryapi.model.Autor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ public record AutorDTO(UUID id,
                        @Size(min = 2, max = 100, message = "Nome fora do tamanho padrão")
                        String nome,
                        @NotNull(message = "Campo obrigatório")
+                       @Past(message = "Data de nascimento precisa ser no passado")
                        LocalDate dataNascimento,
                        @NotBlank(message = "Campo obrigatório")
                        @Size(min = 2, max = 50, message = "Nacionalidade fora do tamanho padrão")

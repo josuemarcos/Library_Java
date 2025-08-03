@@ -6,6 +6,8 @@ import github.com.josuemarcos.libraryapi.repository.AutorRepository;
 import github.com.josuemarcos.libraryapi.repository.LivroRepository;
 import github.com.josuemarcos.libraryapi.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,14 +39,19 @@ public class AutorService {
     }
 
     public List<Autor> pesquisarAutores(String nome, String nacionalidade) {
-        if(nome != null && nacionalidade != null) {
-            return repository.findByNomeAndNacionalidade(nome, nacionalidade);
-        } else if (nome != null) {
-            return repository.findByNome(nome);
-        } else if (nacionalidade != null) {
-            return repository.findByNacionalidade(nacionalidade);
-        }
-        return repository.findAll();
+        Autor autor = new Autor();
+        autor.setNome(nome);
+        autor.setNacionalidade(nacionalidade);
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withIgnorePaths("id", "dataNascimento", "dataCadastro")
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Autor> autorExample = Example.of(autor, matcher);
+        return repository.findAll(autorExample);
     }
 
     public void atualizarAutor(Autor autor) {
