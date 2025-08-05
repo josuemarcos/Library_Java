@@ -1,17 +1,12 @@
 package github.com.josuemarcos.libraryapi.controller;
-
 import github.com.josuemarcos.libraryapi.controller.dto.AutorDTO;
-import github.com.josuemarcos.libraryapi.controller.dto.ErroResposta;
 import github.com.josuemarcos.libraryapi.controller.mapper.AutorMapper;
-import github.com.josuemarcos.libraryapi.exceptions.OperacaoNaoPermitidaException;
-import github.com.josuemarcos.libraryapi.exceptions.RegistroDuplicadoException;
 import github.com.josuemarcos.libraryapi.model.Autor;
 import github.com.josuemarcos.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -28,7 +23,7 @@ public class AutorController implements GenericController{
 
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO dto) {
+    public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO dto) {
         Autor autor = mapper.toEntity(dto);
         service.salvar(autor);
         URI location = gerarHeaderLocation(autor.getId());
@@ -60,7 +55,7 @@ public class AutorController implements GenericController{
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> deletarAutor(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Void> deletarAutor(@PathVariable(name = "id") String id) {
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = service.encontrarAutorPorId(idAutor);
         if(autorOptional.isPresent()) {
@@ -83,7 +78,7 @@ public class AutorController implements GenericController{
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> atualizarAutor(
+    public ResponseEntity<Void> atualizarAutor(
             @PathVariable(name = "id") String id,
             @RequestBody AutorDTO autorDTO
     ) {
