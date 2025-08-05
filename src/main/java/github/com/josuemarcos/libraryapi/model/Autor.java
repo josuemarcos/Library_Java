@@ -1,6 +1,9 @@
 package github.com.josuemarcos.libraryapi.model;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,6 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "autor")
 @Data
+@ToString(exclude = {"livros"})
 @EntityListeners(AuditingEntityListener.class)
 public class Autor {
 

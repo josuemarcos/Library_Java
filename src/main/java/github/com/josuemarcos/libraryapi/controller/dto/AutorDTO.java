@@ -20,5 +20,4 @@ public record AutorDTO(UUID id,
                        @Size(min = 2, max = 50, message = "Nacionalidade fora do tamanho padrão")
                        String nacionalidade) {
 
-
 }
