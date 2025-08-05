@@ -29,17 +29,10 @@ public class AutorController implements GenericController{
 
     @PostMapping
     public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO dto) {
-
-        try{
-            Autor autor = mapper.toEntity(dto);
-            service.salvar(autor);
-            URI location = gerarHeaderLocation(autor.getId());
-            return ResponseEntity.created(location).build();
-        } catch (RegistroDuplicadoException e) {
-            var erroDTO = ErroResposta.erroConflito(e.getMessage());
-            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
-        }
-
+        Autor autor = mapper.toEntity(dto);
+        service.salvar(autor);
+        URI location = gerarHeaderLocation(autor.getId());
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("{id}")
@@ -68,18 +61,13 @@ public class AutorController implements GenericController{
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deletarAutor(@PathVariable(name = "id") String id) {
-        try {
-            var idAutor = UUID.fromString(id);
-            Optional<Autor> autorOptional = service.encontrarAutorPorId(idAutor);
-            if(autorOptional.isPresent()) {
-                service.deletarAutor(autorOptional.get());
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.notFound().build();
-        } catch(OperacaoNaoPermitidaException e) {
-            var erroDTO = ErroResposta.erroPadrao(e.getMessage());
-            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = service.encontrarAutorPorId(idAutor);
+        if(autorOptional.isPresent()) {
+            service.deletarAutor(autorOptional.get());
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping
@@ -99,21 +87,16 @@ public class AutorController implements GenericController{
             @PathVariable(name = "id") String id,
             @RequestBody AutorDTO autorDTO
     ) {
-        try{
-            var idAutor = UUID.fromString(id);
-            Optional<Autor> autorOptional = service.encontrarAutorPorId(idAutor);
-            if(autorOptional.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
-            Autor autor = autorOptional.get();
-            autor.setNome(autorDTO.nome());
-            autor.setDataNascimento(autorDTO.dataNascimento());
-            autor.setNacionalidade(autorDTO.nacionalidade());
-            service.atualizarAutor(autor);
-            return ResponseEntity.noContent().build();
-        } catch (RegistroDuplicadoException e) {
-            var erroDto = ErroResposta.erroConflito(e.getMessage());
-            return ResponseEntity.status(erroDto.status()).body(erroDto);
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = service.encontrarAutorPorId(idAutor);
+        if(autorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
+        Autor autor = autorOptional.get();
+        autor.setNome(autorDTO.nome());
+        autor.setDataNascimento(autorDTO.dataNascimento());
+        autor.setNacionalidade(autorDTO.nacionalidade());
+        service.atualizarAutor(autor);
+        return ResponseEntity.noContent().build();
     }
 }
