@@ -42,6 +42,7 @@ public class GlobalExceptionHandler {
         return ErroResposta.erroPadrao(e.getMessage());
     }
 
+    @ExceptionHandler(RuntimeException.class)
     public ErroResposta handleErroInesperadoException(RuntimeException e) {
         return new ErroResposta(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
