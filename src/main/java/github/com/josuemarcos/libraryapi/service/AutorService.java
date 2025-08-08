@@ -18,27 +18,27 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AutorService {
 
-    private final AutorRepository repository;
-    private final AutorValidator validator;
+    private final AutorRepository autorRepository;
+    private final AutorValidator autorValidator;
     private final LivroRepository livroRepository;
 
     public Autor salvar(Autor autor) {
-        validator.validar(autor);
-        return repository.save(autor);
+        autorValidator.validar(autor);
+        return autorRepository.save(autor);
     }
 
     public Optional<Autor> encontrarAutorPorId(UUID id) {
-        return repository.findById(id);
+        return autorRepository.findById(id);
     }
 
     public void deletarAutor(Autor autor) {
         if(possuiLivro(autor)) {
             throw new OperacaoNaoPermitidaException("Não é possível deletar um autor que possui livros cadastrados!");
         }
-        repository.delete(autor);
+        autorRepository.delete(autor);
     }
 
-    public List<Autor> pesquisarAutores(String nome, String nacionalidade) {
+    public List<Autor> pesquisarAutoresPorParametros(String nome, String nacionalidade) {
         Autor autor = new Autor();
         autor.setNome(nome);
         autor.setNacionalidade(nacionalidade);
@@ -51,12 +51,12 @@ public class AutorService {
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         Example<Autor> autorExample = Example.of(autor, matcher);
-        return repository.findAll(autorExample);
+        return autorRepository.findAll(autorExample);
     }
 
     public void atualizarAutor(Autor autor) {
-        validator.validar(autor);
-        repository.save(autor);
+        autorValidator.validar(autor);
+        autorRepository.save(autor);
     }
 
     public boolean possuiLivro(Autor autor) {

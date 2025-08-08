@@ -18,14 +18,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AutorController implements GenericController{
 
-    private final AutorService service;
-    private final AutorMapper mapper;
+    private final AutorService autorService;
+    private final AutorMapper autorMapper;
 
 
     @PostMapping
     public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO dto) {
-        Autor autor = mapper.toEntity(dto);
-        service.salvar(autor);
+        Autor autor = autorMapper.toEntity(dto);
+        autorService.salvar(autor);
         URI location = gerarHeaderLocation(autor.getId());
         return ResponseEntity.created(location).build();
     }
@@ -33,11 +33,11 @@ public class AutorController implements GenericController{
     @GetMapping("{id}")
     public ResponseEntity<AutorDTO> buscarAutorPorId(@PathVariable(name = "id") String id) {
         var idAutor = UUID.fromString(id);
-        return service
+        return autorService
                 .encontrarAutorPorId(idAutor)
                 .map(
                         autor -> {
-                            AutorDTO dto = mapper.toDTO(autor);
+                            AutorDTO dto = autorMapper.toDTO(autor);
                             return ResponseEntity.ok(dto);
                         }
                 ).orElseGet(() -> ResponseEntity.notFound().build());
@@ -57,9 +57,9 @@ public class AutorController implements GenericController{
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deletarAutor(@PathVariable(name = "id") String id) {
         var idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional = service.encontrarAutorPorId(idAutor);
+        Optional<Autor> autorOptional = autorService.encontrarAutorPorId(idAutor);
         if(autorOptional.isPresent()) {
-            service.deletarAutor(autorOptional.get());
+            autorService.deletarAutor(autorOptional.get());
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
@@ -68,11 +68,11 @@ public class AutorController implements GenericController{
     @GetMapping
     public ResponseEntity<List<AutorDTO>> pesquisarAutores(@RequestParam(value = "nome", required = false) String nome,
                                                            @RequestParam(value = "nacionalidade", required = false) String nacionalidade) {
-        List<Autor> autores = service.pesquisarAutores(nome, nacionalidade);
+        List<Autor> autores = autorService.pesquisarAutoresPorParametros(nome, nacionalidade);
 
         List<AutorDTO> autoresDTO = autores
                 .stream()
-                .map(mapper::toDTO)
+                .map(autorMapper::toDTO)
                 .toList();
         return ResponseEntity.ok(autoresDTO);
     }
@@ -83,7 +83,7 @@ public class AutorController implements GenericController{
             @RequestBody AutorDTO autorDTO
     ) {
         var idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional = service.encontrarAutorPorId(idAutor);
+        Optional<Autor> autorOptional = autorService.encontrarAutorPorId(idAutor);
         if(autorOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -91,7 +91,7 @@ public class AutorController implements GenericController{
         autor.setNome(autorDTO.nome());
         autor.setDataNascimento(autorDTO.dataNascimento());
         autor.setNacionalidade(autorDTO.nacionalidade());
-        service.atualizarAutor(autor);
+        autorService.atualizarAutor(autor);
         return ResponseEntity.noContent().build();
     }
 }
