@@ -28,8 +28,11 @@ public class AutorValidator {
             return autorEncontrado.isPresent();
         }
 
-        return autorEncontrado.isPresent() && !autor.getId().equals(autorEncontrado.get().getId());
-
-
+        return autorEncontrado
+                .map(Autor::getId)
+                .stream()
+                .anyMatch(id -> !id.equals(autor.getId()));
+        //Solução sem map/stream
+       // return autorEncontrado.isPresent() && !autor.getId().equals(autorEncontrado.get().getId());
     }
 }

@@ -3,6 +3,7 @@ package github.com.josuemarcos.libraryapi.service;
 import github.com.josuemarcos.libraryapi.model.GeneroLivro;
 import github.com.josuemarcos.libraryapi.model.Livro;
 import github.com.josuemarcos.libraryapi.repository.LivroRepository;
+import github.com.josuemarcos.libraryapi.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,11 @@ import static github.com.josuemarcos.libraryapi.repository.specs.LivroSpecs.*;
 @RequiredArgsConstructor
 public class LivroService {
     private final LivroRepository livroRepository;
+    private final LivroValidator livroValidator;
 
 
-    public Livro salvar(Livro livro) {
+    public Livro salvarLivro(Livro livro) {
+        livroValidator.validarLivro(livro);
         return livroRepository.save(livro);
     }
 
@@ -55,5 +58,10 @@ public class LivroService {
 
         return livroRepository.findAll(specs);
 
+    }
+
+    public void atualizarLivro(Livro livro) {
+        livroValidator.validarLivro(livro);
+        livroRepository.save(livro);
     }
 }

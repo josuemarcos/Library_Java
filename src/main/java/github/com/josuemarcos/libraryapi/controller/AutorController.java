@@ -25,16 +25,15 @@ public class AutorController implements GenericController{
     @PostMapping
     public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO dto) {
         Autor autor = autorMapper.toEntity(dto);
-        autorService.salvar(autor);
+        autorService.salvarAutor(autor);
         URI location = gerarHeaderLocation(autor.getId());
         return ResponseEntity.created(location).build();
     }
 
     @GetMapping("{id}")
     public ResponseEntity<AutorDTO> buscarAutorPorId(@PathVariable(name = "id") String id) {
-        var idAutor = UUID.fromString(id);
         return autorService
-                .encontrarAutorPorId(idAutor)
+                .encontrarAutorPorId(UUID.fromString(id))
                 .map(
                         autor -> {
                             AutorDTO dto = autorMapper.toDTO(autor);

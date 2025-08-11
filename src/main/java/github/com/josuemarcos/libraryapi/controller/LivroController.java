@@ -26,7 +26,7 @@ public class LivroController implements GenericController{
     @PostMapping
     public ResponseEntity<Object> salvar(@RequestBody @Valid CadastroLivroDTO dto) {
         Livro livro = livroMapper.toEntity(dto);
-        livroService.salvar(livro);
+        livroService.salvarLivro(livro);
         URI location = gerarHeaderLocation(livro.getId());
         return ResponseEntity.created(location).build();
     }
@@ -63,9 +63,28 @@ public class LivroController implements GenericController{
             @RequestParam(value = "ano-publicacao", required = false)
             Integer anoPublicacao
     ) {
-        List<ResultadoPesquisaLivroDTO> list = livroService.pesquisaLivrosPorParametros(isbn, titulo, nomeAutor, genero, anoPublicacao).stream().map(livroMapper::toDTO).toList();
+        List<ResultadoPesquisaLivroDTO> list = livroService.pesquisaLivrosPorParametros(
+                isbn, titulo, nomeAutor, genero, anoPublicacao).
+                stream().
+                map(livroMapper::toDTO).
+                toList();
         return ResponseEntity.ok(list);
     }
 
-
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> atualizarLivro(
+            @PathVariable(name = "id") String id, @RequestBody @Valid CadastroLivroDTO dto) {
+        return livroService.encontrarLivroPorId(UUID.fromString(id))
+                .map(livro -> {
+                    Livro entidadeAux = livroMapper.toEntity(dto);
+                    livro.setIsbn(entidadeAux.getIsbn());
+                    livro.setTitulo(entidadeAux.getTitulo());
+                    livro.setDataPublicacao(entidadeAux.getDataPublicacao());
+                    livro.setGenero(entidadeAux.getGenero());
+                    livro.setPreco(entidadeAux.getPreco());
+                    livro.setAutor(entidadeAux.getAutor());
+                    livroService.atualizarLivro(livro);
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
