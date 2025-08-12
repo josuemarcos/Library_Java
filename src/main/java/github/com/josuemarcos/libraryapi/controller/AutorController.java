@@ -79,7 +79,7 @@ public class AutorController implements GenericController{
     @PutMapping("{id}")
     public ResponseEntity<Void> atualizarAutor(
             @PathVariable(name = "id") String id,
-            @RequestBody AutorDTO autorDTO
+            @RequestBody @Valid AutorDTO autorDTO
     ) {
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.encontrarAutorPorId(idAutor);

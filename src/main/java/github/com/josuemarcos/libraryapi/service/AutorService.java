@@ -19,11 +19,9 @@ import java.util.UUID;
 public class AutorService {
 
     private final AutorRepository autorRepository;
-    private final AutorValidator autorValidator;
     private final LivroRepository livroRepository;
 
     public Autor salvarAutor(Autor autor) {
-        autorValidator.validar(autor);
         return autorRepository.save(autor);
     }
 
@@ -55,7 +53,6 @@ public class AutorService {
     }
 
     public void atualizarAutor(Autor autor) {
-        autorValidator.validar(autor);
         autorRepository.save(autor);
     }
 
