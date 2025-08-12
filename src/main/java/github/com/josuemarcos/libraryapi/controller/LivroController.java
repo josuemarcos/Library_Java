@@ -1,11 +1,11 @@
 package github.com.josuemarcos.libraryapi.controller;
-
 import github.com.josuemarcos.libraryapi.controller.dto.CadastroLivroDTO;
 import github.com.josuemarcos.libraryapi.controller.dto.ResultadoPesquisaLivroDTO;
 import github.com.josuemarcos.libraryapi.controller.mapper.LivroMapper;
 import github.com.josuemarcos.libraryapi.model.GeneroLivro;
 import github.com.josuemarcos.libraryapi.model.Livro;
 import github.com.josuemarcos.libraryapi.service.LivroService;
+import github.com.josuemarcos.libraryapi.validator.ValidBook;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

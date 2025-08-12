@@ -1,15 +1,15 @@
 package github.com.josuemarcos.libraryapi.controller.dto;
-
 import github.com.josuemarcos.libraryapi.model.GeneroLivro;
+import github.com.josuemarcos.libraryapi.validator.ValidBook;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import org.hibernate.validator.constraints.ISBN;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@ValidBook
 public record CadastroLivroDTO(
         @NotBlank(message = "Campo obrigatório!")
         @ISBN

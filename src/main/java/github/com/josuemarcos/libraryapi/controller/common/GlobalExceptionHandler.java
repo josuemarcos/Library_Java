@@ -1,5 +1,4 @@
 package github.com.josuemarcos.libraryapi.controller.common;
-
 import github.com.josuemarcos.libraryapi.controller.dto.ErroCampo;
 import github.com.josuemarcos.libraryapi.controller.dto.ErroResposta;
 import github.com.josuemarcos.libraryapi.exceptions.OperacaoNaoPermitidaException;
@@ -41,7 +40,7 @@ public class GlobalExceptionHandler {
         return ErroResposta.erroPadrao(e.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    //@ExceptionHandler(RuntimeException.class)
     public ErroResposta handleErroInesperadoException(RuntimeException e) {
         return new ErroResposta(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
