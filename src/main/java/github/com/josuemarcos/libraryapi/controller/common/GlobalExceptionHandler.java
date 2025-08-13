@@ -15,7 +15,6 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErroResposta handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<FieldError> fieldErrors = e.getFieldErrors();
         List<ErroCampo> listaErrosCampo = fieldErrors
